@@ -1,0 +1,19 @@
+{
+  "name": "Ludrest — tu diario de restaurantes",
+  "short_name": "Ludrest",
+  "description": "Apunta qué has probado en cada restaurante, con fotos y notas.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#faf7f4",
+  "theme_color": "#e85d3d",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

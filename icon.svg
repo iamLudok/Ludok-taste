@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#e85d3d"/>
+  <g fill="#fff">
+    <!-- tenedor -->
+    <path d="M150 96c-8 0-14 6-14 14v92c0 26 16 48 38 57v151c0 14 11 26 26 26s26-12 26-26V259c22-9 38-31 38-57v-92c0-8-6-14-14-14s-14 6-14 14v78h-22v-78c0-8-6-14-14-14s-14 6-14 14v78h-22v-78c0-8-6-14-14-14z"/>
+    <!-- check -->
+    <path d="M318 262l52 52 96-108" fill="none" stroke="#fff" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- plato -->
+    <circle cx="366" cy="356" r="60" fill="none" stroke="#fff" stroke-width="24"/>
+  </g>
+</svg>
