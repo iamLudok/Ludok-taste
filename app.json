@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "Ludrest",
+    "slug": "ludrest",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "ludrest",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.ludok.rest",
+      "adaptiveIcon": {
+        "backgroundColor": "#e85d3d",
+        "foregroundImage": "./assets/android-icon-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-image",
+      "expo-sharing",
+      "@react-native-community/datetimepicker",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Ludrest necesita acceso a tus fotos para poner una imagen a los platos que pruebas.",
+          "cameraPermission": "Ludrest necesita la cámara para hacerle la foto al plato."
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "backgroundColor": "#0a0a0c",
+          "imageWidth": 160
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ]
+  }
+}

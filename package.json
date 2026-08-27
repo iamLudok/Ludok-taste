@@ -1,0 +1,49 @@
+{
+  "name": "ludrest",
+  "version": "1.0.0",
+  "main": "expo-router/entry",
+  "private": true,
+  "dependencies": {
+    "@react-native-community/datetimepicker": "9.1.0",
+    "drizzle-orm": "^0.45.2",
+    "expo": "~57.0.8",
+    "expo-build-properties": "^57.0.9",
+    "expo-constants": "~57.0.7",
+    "expo-document-picker": "~57.0.1",
+    "expo-file-system": "~57.0.1",
+    "expo-image": "~57.0.1",
+    "expo-image-manipulator": "~57.0.1",
+    "expo-image-picker": "~57.0.1",
+    "expo-linking": "~57.0.4",
+    "expo-navigation-bar": "~57.0.2",
+    "expo-network": "~57.0.1",
+    "expo-router": "~57.0.8",
+    "expo-sharing": "~57.0.7",
+    "expo-splash-screen": "^57.0.5",
+    "expo-sqlite": "~57.0.1",
+    "expo-status-bar": "~57.0.1",
+    "expo-system-ui": "^57.0.1",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "~4.26.0",
+    "react-native-url-polyfill": "^4.0.0"
+  },
+  "devDependencies": {
+    "@libsql/client": "^0.17.4",
+    "@types/node": "^26.1.1",
+    "@types/react": "~19.2.2",
+    "tsx": "^4.23.1",
+    "typescript": "~6.0.3"
+  },
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p verify",
+    "verify:data": "tsx verify/data.ts",
+    "verify:library": "tsx verify/library.ts",
+    "verify:migration": "tsx verify/migration.ts",
+    "verify": "npm run verify:data && npm run verify:library && npm run verify:migration",
+    "build:apk": "bash scripts/build-apk.sh"
+  }
+}
