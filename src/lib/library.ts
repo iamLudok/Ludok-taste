@@ -203,6 +203,18 @@ export function progressOf(dishes: Dish[], tastings: Tasting[]): Progress {
   }
 }
 
+/**
+ * Gasto estimado en un restaurante: el precio de cada plato por las veces que
+ * lo has comido. Cuenta también los platos que ya no están en la carta — lo
+ * que te gastaste ahí no deja de haber pasado porque el plato lo hayan
+ * quitado — y solo suma lo que tenga precio apuntado.
+ */
+export function spentOf(dishes: Dish[], tastings: Tasting[]): number {
+  const priceById = new Map(dishes.map((d) => [d.id, d.price]))
+  const total = tastings.reduce((sum, t) => sum + (priceById.get(t.dishId) ?? 0), 0)
+  return Math.round(total * 100) / 100
+}
+
 /** Ordena la carta: primero lo que se puede pedir, y dentro por nombre. */
 export function sortDishes(dishes: Dish[]): Dish[] {
   return [...dishes].sort(
@@ -301,9 +313,6 @@ export function computeStats(restaurants: Restaurant[], dishes: Dish[], tastings
     ).complete
   }).length
 
-  const priceById = new Map(dishes.map((d) => [d.id, d.price]))
-  const spent = tastings.reduce((sum, t) => sum + (priceById.get(t.dishId) ?? 0), 0)
-
   return {
     restaurants: restaurants.length,
     dishes: active.length,
@@ -312,7 +321,7 @@ export function computeStats(restaurants: Restaurant[], dishes: Dish[], tastings
     tastings: tastings.length,
     avg: avgRating(tastings),
     completed,
-    spent: Math.round(spent * 100) / 100,
+    spent: spentOf(dishes, tastings),
   }
 }
 

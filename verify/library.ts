@@ -22,6 +22,7 @@ import {
   suggest,
   summarize,
   computeStats,
+  spentOf,
   topDishes,
 } from '../src/lib/library'
 import { parsePrice, trimmed } from '../src/lib/rows'
@@ -183,6 +184,20 @@ async function main() {
   eq('nota media', stats.avg, 4)
   eq('una carta completa (la de r2, ignorando el retirado)', stats.completed, 1)
   eq('gasto estimado: 10 + 10 + 3', stats.spent, 23)
+
+  console.log('\n=== 7b. Gasto por restaurante ===')
+  const gastoR1 = spentOf(
+    [dish('d1', { price: 10 })],
+    [tasting('d1', 5), tasting('d1', 3, '2026-02-02')],
+  )
+  eq('dos veces el mismo plato a 10: 20', gastoR1, 20)
+  const gastoConRetirado = spentOf(
+    [dish('d1', { price: 3 }), dish('d2', { price: 7, archived: true })],
+    [tasting('d1'), tasting('d2')],
+  )
+  eq('lo gastado en un plato retirado sigue contando', gastoConRetirado, 10)
+  eq('sin degustaciones no se ha gastado nada', spentOf([dish('d1', { price: 10 })], []), 0)
+  eq('un plato sin precio no suma', spentOf([dish('d1')], [tasting('d1')]), 0)
 
   const top = topDishes(
     [{ id: 'r1', name: 'Uno', createdAt: 0, updatedAt: 0 }],

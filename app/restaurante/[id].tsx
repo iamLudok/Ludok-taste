@@ -7,9 +7,9 @@ import { Chips } from '../../src/ui/Chips'
 import { Fab } from '../../src/ui/Fab'
 import { Progress } from '../../src/ui/Progress'
 import { useLibrary } from '../../src/hooks/useLibrary'
-import { byDish, groupByCategory, progressOf, sortDishes, suggest, deleteRestaurantDeep } from '../../src/lib/library'
+import { byDish, groupByCategory, progressOf, spentOf, sortDishes, suggest, deleteRestaurantDeep } from '../../src/lib/library'
 import { deletePhotos } from '../../src/lib/photos'
-import { DishRow } from '../../src/components/DishRow'
+import { DishRow, fmtPrice } from '../../src/components/DishRow'
 import { DishSheet } from '../../src/components/DishSheet'
 import { TastingSheet } from '../../src/components/TastingSheet'
 import { RestaurantSheet } from '../../src/components/RestaurantSheet'
@@ -40,6 +40,7 @@ export default function RestaurantScreen() {
   const ownTastings = useMemo(() => tastings.filter((t) => t.restaurantId === id), [tastings, id])
   const grouped = useMemo(() => byDish(ownTastings), [ownTastings])
   const progress = useMemo(() => progressOf(ownDishes, ownTastings), [ownDishes, ownTastings])
+  const spent = useMemo(() => spentOf(ownDishes, ownTastings), [ownDishes, ownTastings])
   const categories = useMemo(
     () => [...new Set(ownDishes.map((d) => d.category).filter((c): c is string => !!c))].sort((a, b) => a.localeCompare(b, 'es')),
     [ownDishes],
@@ -114,6 +115,7 @@ export default function RestaurantScreen() {
           {progress.total
             ? `${progress.tried}/${progress.total} probados${progress.complete ? ' · carta completa' : ''}`
             : 'la carta está vacía'}
+          {spent > 0 ? ` · gastado ${fmtPrice(spent)}` : ''}
         </Txt>
         <Chips options={TABS} value={tab} onChange={setTab} />
       </View>
