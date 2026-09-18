@@ -39,7 +39,7 @@ export default function RestaurantesScreen() {
   }, [restaurants, dishes, tastings])
 
   return (
-    <Screen title="Ludrest" padded={false}>
+    <Screen title="Restaurantes" padded={false}>
       <FlatList
         data={cards}
         keyExtractor={(c) => c.restaurant.id}

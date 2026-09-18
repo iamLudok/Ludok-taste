@@ -59,7 +59,7 @@ export function NextcloudSettings() {
       nextcloudUrl: url.trim(),
       nextcloudUser: user.trim(),
       nextcloudPassword: password,
-      nextcloudFolder: folder.trim() || 'Ludrest',
+      nextcloudFolder: folder.trim() || 'Ludok Taste',
     })
     setStatus({ ok: true, text: 'Guardado.' })
   }
@@ -150,7 +150,7 @@ export function NextcloudSettings() {
       <TextInput
         value={folder}
         onChangeText={setFolder}
-        placeholder="Carpeta (por defecto: Ludrest)"
+        placeholder="Carpeta (por defecto: Ludok Taste)"
         placeholderTextColor={palette.faint}
         autoCapitalize="none"
         autoCorrect={false}

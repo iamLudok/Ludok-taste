@@ -55,9 +55,10 @@ CREATE INDEX IF NOT EXISTS tastings_date_idx ON tastings (date);
  * Van con `ADD COLUMN` porque CREATE_SQL ya describe el esquema final para
  * instalaciones nuevas: esto es solo para poner al día las que ya existían.
  *
- * Está vacío a propósito: esta app nace con el esquema entero. La v1 de Ludrest
- * fue la PWA, que guardaba en IndexedDB y no en SQLite, así que no hay ninguna
- * instalación anterior que migrar — esas copias entran por el importador.
+ * Está vacío a propósito: esta app nace con el esquema entero. Antes de ser una
+ * app nativa (y de llamarse Ludok Taste) esto fue la PWA Ludrest, que guardaba
+ * en IndexedDB y no en SQLite, así que no hay ninguna instalación anterior que
+ * migrar — esas copias entran por el importador.
  */
 export const MIGRATIONS: string[] = []
 

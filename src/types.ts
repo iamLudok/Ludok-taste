@@ -1,4 +1,4 @@
-// Modelo de datos de Ludrest.
+// Modelo de datos de Ludok Taste.
 //
 // Todo vive en local (SQLite privado de la app). Tres niveles: un restaurante
 // tiene una carta de platos, y cada vez que comes uno se apunta una
@@ -71,7 +71,7 @@ export interface Settings {
  * una copia sea un único fichero que se pueda mandar a cualquier sitio.
  */
 export interface BackupFile {
-  app: 'ludrest'
+  app: 'ludok-taste'
   schemaVersion: number
   exportedAt: number
   restaurants: Restaurant[]

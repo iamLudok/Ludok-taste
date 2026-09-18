@@ -1,15 +1,16 @@
-# Ludrest
+# Ludok Taste
 
 Diario de restaurantes: qué platos has probado en cada sitio, con nota, comentario y foto,
 para no volver a pedir a ciegas. **Los datos son míos** y viven en mi móvil.
 
-React Native con Expo SDK 57, igual que [Ludok Time](../Ludok%20time) y [Ludok Been](../Ludok%20been).
+React Native con Expo SDK 57, igual que [Ludok Time](../Ludok%20Time), [Ludok Been](../Ludok%20Been)
+y [Ludok Wallet](../Ludok%20Wallet).
 
 ## Lo que manda: no perder datos nunca
 
 Todo lo demás va después.
 
-- Los datos viven en `/data/data/com.ludok.rest/`. No hay cuentas ni servidores.
+- Los datos viven en `/data/data/com.ludok.taste/`. No hay cuentas ni servidores.
 - Copia de seguridad en JSON, exportable e importable en cualquier momento, **con las fotos dentro**.
 - **Copia automática a un Nextcloud propio** al abrir la app estando en WiFi, un fichero por día.
 - Aviso en la pantalla de inicio cuando llevas mucho sin copia.
@@ -145,17 +146,25 @@ el aviso de copia. Todo sale de [`src/ui/theme.ts`](src/ui/theme.ts).
 
 Hay tema claro además del oscuro, con el mismo criterio; se elige en Ajustes.
 
-## Historia: antes era una PWA
+## Historia: dos nombres antes de este
 
-Hasta agosto de 2026 esto era una PWA (HTML + JS a pelo, con IndexedDB) pensada para GitHub Pages.
-Se reescribió como app nativa por lo mismo que Ludok Time: en GrapheneOS una PWA
+Hasta agosto de 2026 esto era una PWA llamada **Ludrest** (HTML + JS a pelo, con IndexedDB)
+pensada para GitHub Pages. Se reescribió como app nativa por lo mismo que Ludok Time: en
+GrapheneOS una PWA
 [no llega a ser una app](https://discuss.grapheneos.org/d/4175-does-pwa-use-webview-or-vanadium),
 y en la web había que *pedirle* al navegador que no borrara los datos
 (`navigator.storage.persist()`), que podía negarse. En nativo solo desaparecen si desinstalas.
 
-**Las copias de aquella versión se siguen pudiendo importar.** El importador las reconoce por el
-campo `version` y traduce lo que cambió: fechas de texto ISO a milisegundos, precios escritos a mano
-(«2,50») a números, cadenas vacías a campos ausentes y las fotos en `data:` URL a ficheros. Está
-todo en [`src/lib/legacy.ts`](src/lib/legacy.ts), con su prueba en `verify:data`.
+Como app nativa siguió llamándose Ludrest hasta septiembre de 2026, cuando pasó a llamarse
+**Ludok Taste** para seguir la misma estructura que el resto de apps de la familia (Ludok Time,
+Ludok Been, Ludok Wallet). Fue un cambio de nombre, no de formato: el paquete Android cambió
+(`com.ludok.rest` → `com.ludok.taste`, por eso hizo falta desinstalar y volver a instalar), pero
+el esquema de la base de datos es el mismo de siempre.
 
-El código web sigue en el historial de git.
+**Las copias de la PWA se siguen pudiendo importar.** El importador las reconoce por el campo
+`version` (en vez de `schemaVersion`) y traduce lo que cambió: fechas de texto ISO a milisegundos,
+precios escritos a mano («2,50») a números, cadenas vacías a campos ausentes y las fotos en
+`data:` URL a ficheros. Está todo en [`src/lib/legacy.ts`](src/lib/legacy.ts), con su prueba en
+`verify:data`.
+
+El código de la PWA sigue en el historial de git.

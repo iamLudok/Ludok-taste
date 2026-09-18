@@ -1,4 +1,4 @@
-import type { LudrestDb } from './backupCore'
+import type { LudokDb } from './backupCore'
 
 /**
  * Referencia a la base de datos en uso, sin importar nada nativo.
@@ -10,13 +10,13 @@ import type { LudrestDb } from './backupCore'
  * En el móvil la registra `db.ts` al arrancar; en las pruebas, el script de
  * verificación con un SQLite de escritorio (libsql).
  */
-let current: LudrestDb | null = null
+let current: LudokDb | null = null
 
-export function setDb(database: LudrestDb): void {
+export function setDb(database: LudokDb): void {
   current = database
 }
 
-export function getDb(): LudrestDb {
+export function getDb(): LudokDb {
   if (!current) {
     throw new Error('La base de datos no está inicializada (falta llamar a setDb).')
   }

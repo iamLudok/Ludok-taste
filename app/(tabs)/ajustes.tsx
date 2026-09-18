@@ -116,7 +116,7 @@ export default function SettingsScreen() {
         </Card>
 
         <Txt variant="small" tone="faint" style={{ textAlign: 'center' }}>
-          Ludrest · tus datos, tuyos.
+          Ludok Taste · tus datos, tuyos.
         </Txt>
       </ScrollView>
     </Screen>

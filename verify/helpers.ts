@@ -12,7 +12,7 @@ import { join } from 'node:path'
 import { rmSync } from 'node:fs'
 import * as schema from '../src/lib/schema'
 import { CREATE_SQL } from '../src/lib/schemaSql'
-import type { LudrestDb, PhotoCodec } from '../src/lib/backupCore'
+import type { LudokDb, PhotoCodec } from '../src/lib/backupCore'
 
 let failures = 0
 
@@ -47,13 +47,13 @@ export function finish(message: string): never {
 let dbSeq = 0
 const tempFiles: string[] = []
 
-export async function freshDb(tag = 'verify'): Promise<LudrestDb> {
-  const path = join(tmpdir(), `ludrest-${tag}-${process.pid}-${dbSeq++}.db`)
+export async function freshDb(tag = 'verify'): Promise<LudokDb> {
+  const path = join(tmpdir(), `ludok-taste-${tag}-${process.pid}-${dbSeq++}.db`)
   rmSync(path, { force: true })
   tempFiles.push(path)
   const client = createClient({ url: `file:${path}` })
   await client.executeMultiple(CREATE_SQL)
-  return drizzle(client, { schema }) as unknown as LudrestDb
+  return drizzle(client, { schema }) as unknown as LudokDb
 }
 
 export function cleanupTempFiles() {

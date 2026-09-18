@@ -9,7 +9,7 @@
  */
 import { setDb } from '../src/lib/dbRef'
 import { saveRestaurant, saveDish, addTasting } from '../src/lib/library'
-import { exportAll, importAll, readSettings, writeSettings, referencedPhotos } from '../src/lib/backupCore'
+import { exportAll, importAll, readSettings, writeSettings, referencedPhotos, APP_ID } from '../src/lib/backupCore'
 import { check, eq, rejects, finish, freshDb, memoryPhotos, SAMPLE_PHOTO } from './helpers'
 import type { BackupFile } from '../src/types'
 
@@ -125,7 +125,7 @@ async function main() {
   const big = await freshDb('data')
   const bigPhotos = memoryPhotos()
   const bulk: BackupFile = {
-    app: 'ludrest',
+    app: APP_ID,
     schemaVersion: 2,
     exportedAt: Date.now(),
     restaurants: Array.from({ length: 40 }, (_, i) => ({
@@ -150,7 +150,7 @@ async function main() {
 
   console.log('\n=== 8. Rechaza lo que no debe aceptar ===')
   await rejects('un JSON inválido', async () => importAll(await freshDb('data'), '{no es json', photos.codec))
-  await rejects('un JSON que no es de Ludrest', async () =>
+  await rejects('un JSON que no es de Ludok Taste', async () =>
     importAll(await freshDb('data'), JSON.stringify({ app: 'otra-cosa', restaurants: [] }), photos.codec),
   )
   await rejects('una copia de una versión más nueva', async () =>

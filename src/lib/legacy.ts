@@ -1,5 +1,8 @@
 /**
- * Lectura de las copias de la PWA (`{app:'ludrest', version:1}`).
+ * Lectura de las copias de la PWA Ludrest (`{app:'ludrest', version:1}`) — el
+ * nombre que llevaba esta app antes de pasar a nativa y, más tarde, a Ludok
+ * Taste. Ese `'ludrest'` es un hecho histórico y no cambia aunque la app se
+ * vuelva a renombrar: es literalmente lo que hay dentro de esas copias.
  *
  * Aquella versión guardaba en IndexedDB: las fechas de creación eran texto ISO
  * con hora, los precios cadenas escritas a mano («2,50»), los campos vacíos
@@ -7,7 +10,7 @@
  * único sitio y sin tocar la base de datos, para que el resto del importador no
  * tenga que saber nada del formato viejo.
  */
-import { SCHEMA_VERSION } from './version'
+import { SCHEMA_VERSION, APP_ID } from './version'
 import { parsePrice, trimmed } from './rows'
 import { todayISO } from './dates'
 import type { BackupFile, Dish, Restaurant, Tasting } from '../types'
@@ -25,6 +28,8 @@ interface LegacyFile {
 export function isLegacyBackup(data: unknown): data is LegacyFile {
   if (typeof data !== 'object' || data === null) return false
   const d = data as Record<string, unknown>
+  // 'ludrest' a secas, sin usar APP_ID: es el nombre que tenía la PWA cuando
+  // exportó esa copia, no el de la app actual.
   return d.app === 'ludrest' && typeof d.version === 'number' && d.schemaVersion === undefined
 }
 
@@ -111,7 +116,7 @@ export function convertLegacy(data: LegacyFile): BackupFile {
   }
 
   return {
-    app: 'ludrest',
+    app: APP_ID,
     schemaVersion: SCHEMA_VERSION,
     exportedAt,
     restaurants,

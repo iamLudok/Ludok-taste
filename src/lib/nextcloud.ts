@@ -167,5 +167,5 @@ export function configFrom(settings: {
   const user = settings.nextcloudUser?.trim()
   const password = settings.nextcloudPassword
   if (!url || !user || !password) return null
-  return { url, user, password, folder: settings.nextcloudFolder?.trim() || 'Ludrest' }
+  return { url, user, password, folder: settings.nextcloudFolder?.trim() || 'Ludok Taste' }
 }

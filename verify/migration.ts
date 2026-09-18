@@ -15,7 +15,7 @@ import { CREATE_SQL, MIGRATIONS, DB_VERSION } from '../src/lib/schemaSql'
 import { check, eq, finish } from './helpers'
 
 async function main() {
-  const path = join(tmpdir(), `ludrest-migration-${process.pid}.db`)
+  const path = join(tmpdir(), `ludok-taste-migration-${process.pid}.db`)
   for (const suffix of ['', '-wal', '-shm']) rmSync(path + suffix, { force: true })
   const client = createClient({ url: `file:${path}` })
 

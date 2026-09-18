@@ -16,16 +16,14 @@ import {
 import { rowToRestaurant, rowToDish, rowToTasting, rowToSettings, settingsToRow, restaurantToRow, dishToRow, tastingToRow } from './rows'
 import { isLegacyBackup, convertLegacy } from './legacy'
 import { chunk } from './sqlHelpers'
-import { SCHEMA_VERSION } from './version'
+import { SCHEMA_VERSION, APP_ID } from './version'
 import type { BackupFile, Dish, Restaurant, Settings, Tasting } from '../types'
 
-export { SCHEMA_VERSION }
+export { SCHEMA_VERSION, APP_ID }
 
 /** Cualquier base de datos SQLite de Drizzle (expo-sqlite en el móvil, libsql en los tests). */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type LudrestDb = BaseSQLiteDatabase<any, any, any>
-
-const APP_ID = 'ludrest'
+export type LudokDb = BaseSQLiteDatabase<any, any, any>
 
 /**
  * Traductor entre las fotos del disco y las de la copia.
@@ -56,7 +54,7 @@ export const DEFAULT_SETTINGS: Settings = {
   autoBackup: false,
 }
 
-export async function readSettings(database: LudrestDb): Promise<Settings> {
+export async function readSettings(database: LudokDb): Promise<Settings> {
   const rows = await database
     .select()
     .from(settingsTable)
@@ -65,7 +63,7 @@ export async function readSettings(database: LudrestDb): Promise<Settings> {
   return rows[0] ? rowToSettings(rows[0]) : DEFAULT_SETTINGS
 }
 
-export async function writeSettings(database: LudrestDb, next: Settings): Promise<void> {
+export async function writeSettings(database: LudokDb, next: Settings): Promise<void> {
   const row = settingsToRow(next)
   await database.insert(settingsTable).values(row).onConflictDoUpdate({ target: settingsTable.id, set: row })
 }
@@ -77,7 +75,7 @@ export async function writeSettings(database: LudrestDb, next: Settings): Promis
  * fichero: se manda por donde sea y se restaura en otro móvil sin que falte
  * nada. El precio es el tamaño (unos 200 KB por foto).
  */
-export async function exportAll(database: LudrestDb, photos: PhotoCodec): Promise<BackupFile> {
+export async function exportAll(database: LudokDb, photos: PhotoCodec): Promise<BackupFile> {
   const restaurantRows = await database.select().from(restaurantsTable)
   const dishRows = await database.select().from(dishesTable)
   const tastingRows = await database.select().from(tastingsTable)
@@ -145,7 +143,7 @@ function isBackupFile(data: unknown): data is BackupFile {
  * se encarga la limpieza de huérfanas.
  */
 export async function importAll(
-  database: LudrestDb,
+  database: LudokDb,
   raw: string,
   photos: PhotoCodec,
 ): Promise<ImportResult> {
@@ -157,7 +155,7 @@ export async function importAll(
   const backup = legacy ? convertLegacy(parsed) : parsed
 
   if (!isBackupFile(backup)) {
-    throw new Error('Este fichero no es una copia de Ludrest.')
+    throw new Error('Este fichero no es una copia de Ludok Taste.')
   }
   if (backup.schemaVersion > SCHEMA_VERSION) {
     throw new Error(
@@ -180,7 +178,7 @@ export async function importAll(
     tastings.push(copy)
   }
 
-  await database.transaction(async (tx: LudrestDb) => {
+  await database.transaction(async (tx: LudokDb) => {
     await tx.delete(tastingsTable)
     await tx.delete(dishesTable)
     await tx.delete(restaurantsTable)
@@ -219,7 +217,7 @@ export async function importAll(
 }
 
 /** Nombres de fichero de todas las fotos referenciadas ahora mismo. */
-export async function referencedPhotos(database: LudrestDb): Promise<Set<string>> {
+export async function referencedPhotos(database: LudokDb): Promise<Set<string>> {
   const rows = await database.select().from(tastingsTable)
   const names = new Set<string>()
   for (const row of rows) if (row.photo) names.add(row.photo)

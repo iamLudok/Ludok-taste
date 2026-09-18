@@ -12,7 +12,7 @@ export { SCHEMA_VERSION } from './version'
  * `enableChangeListener` es imprescindible: es lo que hace que `useLiveQuery`
  * de Drizzle se entere de los cambios y vuelva a pintar las pantallas solo.
  */
-export const sqlite = SQLite.openDatabaseSync('ludrest.db', {
+export const sqlite = SQLite.openDatabaseSync('ludok-taste.db', {
   enableChangeListener: true,
 })
 

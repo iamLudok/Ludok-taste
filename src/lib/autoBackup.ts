@@ -27,7 +27,7 @@ function filenameFor(date = new Date()): string {
   const pad = (n: number) => String(n).padStart(2, '0')
   // Un fichero por día: se reemplaza dentro del mismo día y queda un histórico
   // de días, que es justo lo que sirve si un día metes la pata con los datos.
-  return `ludrest-${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}.json`
+  return `ludok-taste-${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}.json`
 }
 
 /** Sube la copia ahora mismo, sin mirar WiFi ni cuánto hace de la última. */

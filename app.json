@@ -1,17 +1,17 @@
 {
   "expo": {
-    "name": "Ludrest",
-    "slug": "ludrest",
+    "name": "Ludok Taste",
+    "slug": "ludok-taste",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "ludrest",
+    "scheme": "ludoktaste",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "package": "com.ludok.rest",
+      "package": "com.ludok.taste",
       "adaptiveIcon": {
         "backgroundColor": "#e85d3d",
         "foregroundImage": "./assets/android-icon-foreground.png"
@@ -27,8 +27,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Ludrest necesita acceso a tus fotos para poner una imagen a los platos que pruebas.",
-          "cameraPermission": "Ludrest necesita la cámara para hacerle la foto al plato."
+          "photosPermission": "Ludok Taste necesita acceso a tus fotos para poner una imagen a los platos que pruebas.",
+          "cameraPermission": "Ludok Taste necesita la cámara para hacerle la foto al plato."
         }
       ],
       [
