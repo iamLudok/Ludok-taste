@@ -1,170 +1,249 @@
+<div align="center">
+
+<img src="assets/icon.png" alt="Ludok Taste icon" width="96">
+
 # Ludok Taste
 
-Diario de restaurantes: qué platos has probado en cada sitio, con nota, comentario y foto,
-para no volver a pedir a ciegas. **Los datos son míos** y viven en mi móvil.
+**A restaurant diary for your phone: remember what you ordered, and whether it was worth it.**
 
-React Native con Expo SDK 57, igual que [Ludok Time](../Ludok%20Time), [Ludok Been](../Ludok%20Been)
-y [Ludok Wallet](../Ludok%20Wallet).
+Every dish you try, with its rating, a comment and a photo, so you never order blind again.<br>
+Your data lives on your phone. No accounts. No servers. No tracking.
 
-## Lo que manda: no perder datos nunca
+[![License: MIT](https://img.shields.io/github/license/iamLudok/Ludok-taste?style=flat-square&color=blue)](LICENSE)
+[![Expo SDK 57](https://img.shields.io/badge/Expo-SDK%2057-000020?style=flat-square&logo=expo&logoColor=white)](https://docs.expo.dev/versions/v57.0.0/)
+[![React Native](https://img.shields.io/badge/React%20Native-0.86-61DAFB?style=flat-square&logo=react&logoColor=black)](https://reactnative.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Android](https://img.shields.io/badge/Android-APK-3DDC84?style=flat-square&logo=android&logoColor=white)](https://github.com/iamLudok/Ludok-taste/releases)
+[![SQLite](https://img.shields.io/badge/SQLite-local--first-003B57?style=flat-square&logo=sqlite&logoColor=white)](https://docs.expo.dev/versions/v57.0.0/sdk/sqlite/)
 
-Todo lo demás va después.
+[Features](#features) · [Download](#download) · [Build](#building-from-source) · [Backups](#backups) · [License](#license)
 
-- Los datos viven en `/data/data/com.ludok.taste/`. No hay cuentas ni servidores.
-- Copia de seguridad en JSON, exportable e importable en cualquier momento, **con las fotos dentro**.
-- **Copia automática a un Nextcloud propio** al abrir la app estando en WiFi, un fichero por día.
-- Aviso en la pantalla de inicio cuando llevas mucho sin copia.
-- La capa de datos **se prueba de verdad**, no solo con tipos (ver más abajo).
+</div>
 
-## Qué se registra
+---
 
-| Nivel | Qué guarda |
+<!--
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/restaurants.png" width="230" alt="Restaurant list">
+  <img src="docs/screenshots/what-to-order.png" width="230" alt="What should I order today?">
+  <img src="docs/screenshots/stats.png" width="230" alt="Stats">
+</p>
+-->
+
+## Table of Contents
+
+- [Why Ludok Taste?](#why-ludok-taste)
+- [Features](#features)
+- [Download](#download)
+- [Backups](#backups)
+- [Building from Source](#building-from-source)
+- [How the Data Layer Is Tested](#how-the-data-layer-is-tested)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Why Ludok Taste?
+
+You go back to a restaurant you liked and can't remember which dish was the great one and which
+one you swore never to order again. Ludok Taste remembers for you.
+
+Its first rule is **never lose data**. Everything else comes second.
+
+- 📱 **Local-first**: everything is stored in a SQLite database inside the app. No accounts, no cloud, no analytics.
+- 💾 **Complete backups**: export everything to a single JSON file, **photos included**, and import it on any phone.
+- ☁️ **Automatic Nextcloud backup** (optional): uploads a copy to your own Nextcloud when you open the app on WiFi.
+- 🧪 **Tested data layer**: the same code that runs on the phone is tested against a real SQLite database (see [below](#how-the-data-layer-is-tested)).
+
+> **What leaves your phone:** nothing, unless you set up the Nextcloud backup. If you do, the
+> backup goes straight to your server and nowhere else.
+
+---
+
+## Features
+
+| Level | What it stores |
 |---|---|
-| Restaurante | Nombre, ciudad, notas y el progreso de su carta |
-| Plato | Categoría, precio, descripción y si sigue o no en la carta |
-| Cada vez que lo comes | Fecha, nota de 1–5 ★, comentario y foto (encogida a 1280 px) |
+| Restaurant | Name, city, notes and how much of the menu you've tried |
+| Dish | Category, price, description, and whether it's still on the menu |
+| Every time you eat it | Date, 1–5 ★ rating, comment and photo (resized to 1280 px) |
 
-Pestaña **«¿Qué pido hoy?»** dentro de cada restaurante: tus favoritos (4★ o más), lo que te falta
-por probar y lo que ya sabes que mejor evitas.
+- 🍽️ **"What should I order today?"**: a tab inside each restaurant with your favourites (4★ or more), what you haven't tried yet, and what you already know to avoid (2★ or less).
+- 📊 **Stats**: restaurants, dishes tried, menus completed, average rating, estimated spending and your best-rated dishes.
+- 💶 **Estimated spending**, per restaurant and overall, based on the price of each dish you've logged.
+- 🌗 **Dark and light theme**, selectable in *Ajustes → Tema*.
+- ⚠️ **Backup reminder** on the home screen if you haven't made a backup in 7 days.
 
-## Arranque
+The app's interface is in Spanish.
+
+---
+
+## Download
+
+Grab the latest signed APK from the [Releases](https://github.com/iamLudok/Ludok-taste/releases) page
+and install it on your Android phone (you'll need to allow installing apps from unknown sources).
+
+Updates install **on top of** the previous version and keep your data, as long as they come from
+the same Releases page (same signing key).
+
+---
+
+## Backups
+
+### Manual backup
+
+**Ajustes → Copia de seguridad → Exportar copia** exports everything to a single JSON file you can save or share wherever you
+want. Photos travel inside the file as `data:` URLs, so a backup is **one self-contained file**.
+That costs about 200 KB per photo.
+
+Importing **replaces everything**. Photos on the phone that are no longer referenced are swept
+automatically ([`prunePhotos`](src/lib/photos.ts)), so they don't pile up import after import.
+
+### Automatic backup to Nextcloud
+
+In **Ajustes → Copia automática a Nextcloud**, enter your server URL, user, password and folder.
+When you open the app on WiFi, it uploads a backup at most once every 12 hours, with one file per day.
+
+- **WiFi only**, because backups include photos and can be tens of megabytes.
+- Use a Nextcloud **[app password](https://docs.nextcloud.com/server/latest/user_manual/en/session_management.html#managing-devices)**, not your account password, so you can revoke it at any time.
+- That password is **never included in exported backups**. A backup is meant to be shared and moved around, and the password grants write access to your files. A test in `verify:data` checks this.
+- No background task is used on purpose: Android kills them silently, and you'd never know whether they worked. Since you open the app at the table to log what you ordered, backups end up being frequent anyway.
+
+> The app allows plain `http://` traffic (`usesCleartextTraffic`) so it can reach a Nextcloud on your
+> home network. Use HTTPS or a VPN if your server is reachable from outside.
+
+---
+
+## Building from Source
+
+### Requirements
+
+- Node.js and npm
+- JDK 17
+- Android SDK with API 36, and `adb`
+- An Android phone connected over USB (or an emulator)
+
+### Run in development
 
 ```bash
+git clone https://github.com/iamLudok/Ludok-taste.git
+cd Ludok-taste
 npm install
-npm run android      # instala y abre en un móvil conectado por adb
-npm run typecheck    # tipos de la app y de los scripts de verificación
-npm run verify       # comprueba la capa de datos
+npm run android      # builds, installs and opens the app on a phone connected via adb
+npm run typecheck    # types for the app and the verification scripts
+npm run verify       # tests the data layer
 ```
 
-Hace falta JDK 17, Android SDK con API 36 y `adb`.
-
-> Gradle pide un toolchain de **Java 17**. Si falla con «Cannot find a Java installation matching
-> languageVersion=17» teniendo un JDK más nuevo, apunta al que Gradle ya se descargó:
+> Gradle needs a **Java 17** toolchain. If it fails with *"Cannot find a Java installation matching
+> languageVersion=17"* while you have a newer JDK, point it to the one Gradle already downloaded:
 >
 > ```bash
 > export JAVA_HOME=~/.gradle/jdks/eclipse_adoptium-17-amd64-linux.2
 > ```
 
-## Compilar un APK
+### Build a release APK
+
+The build script signs the APK with your own keystore. Create one and describe it in a
+`keystore.properties` file at the project root (both are in `.gitignore`):
 
 ```bash
-npm run build:apk                    # todas las arquitecturas
-./scripts/build-apk.sh --compartir   # solo arm64-v8a, para repartir
+keytool -genkeypair -v -keystore release.jks -alias ludok-taste \
+  -keyalg RSA -keysize 2048 -validity 10000
+```
+
+```properties
+storeFile=release.jks
+storePassword=...
+keyAlias=ludok-taste
+keyPassword=...
+```
+
+Then:
+
+```bash
+npm run build:apk                    # all architectures
+./scripts/build-apk.sh --compartir   # arm64-v8a only, smaller, for sharing
 # → android/app/build/outputs/apk/release/app-release.apk
+
+adb install -r android/app/build/outputs/apk/release/app-release.apk
 ```
 
-Tiene que ser **release**, no debug: en debug el JavaScript no va dentro del APK, se carga del
-servidor de Metro, así que un APK de debug no funciona sin el ordenador delante.
+It has to be a **release** build: a debug APK loads its JavaScript from the Metro server, so it
+doesn't work without your computer.
 
-Instalar: `adb install -r app-release.apk`. Con `-r` se instala **encima** conservando los datos,
-siempre que la firma sea la misma.
+> ⚠️ **Keep your keystore safe.** Android only installs an APK on top of another if both are signed
+> with the same key. If you lose it, the only way to install a new version is to uninstall the
+> app, and **uninstalling deletes its data**. It's the one thing in this project that can't be
+> regenerated.
 
-### ⚠️ El keystore hay que guardarlo como oro
+---
 
-La firma vive en `release.jks` + `keystore.properties`, los dos fuera del repo (en `.gitignore`).
+## How the Data Layer Is Tested
 
-Android solo deja instalar un APK **encima** de otro si van firmados con la misma clave. Si se
-pierden, la única salida es **desinstalar** para poner la versión nueva — y desinstalar **borra los
-datos de la app**.
-
-Guárdalos junto a las copias de seguridad. Es lo único de este proyecto que no se puede regenerar.
-
-## Las fotos
-
-Cada foto se encoge a 1280 px de lado mayor y se guarda como JPEG (calidad 0.82) en la carpeta de
-datos de la app. En la base de datos solo se guarda el **nombre del fichero**, nunca la ruta
-completa: la carpeta cambia de sitio entre instalaciones y una ruta absoluta guardada apuntaría a
-la nada al restaurar una copia en otro móvil.
-
-En las copias de seguridad ese mismo campo viaja como `data:` URL con la imagen dentro, para que
-una copia sea **un solo fichero** que se puede mandar a donde sea. El precio es el tamaño: unos
-200 KB por foto.
-
-Al importar se reemplaza todo, así que las fotos del móvil que no vengan en la copia se quedan sin
-dueño; se barren solas ([`prunePhotos`](src/lib/photos.ts)) para que no se acumulen megas
-invisibles importación tras importación.
-
-## Copia automática a Nextcloud
-
-En **Ajustes → Copia automática a Nextcloud**: dirección, usuario, contraseña y carpeta. Al abrir la
-app estando en WiFi sube sola, como mucho una vez cada 12 horas, con un fichero por día.
-
-Solo por WiFi, y aquí no es un capricho heredado: la copia lleva las fotos dentro, así que puede ser
-de decenas de megas.
-
-Usa una **contraseña de aplicación** de Nextcloud (Ajustes personales → Seguridad), no la de la
-cuenta: se revoca sola sin tocar nada más.
-
-Esa contraseña **no se incluye en las copias exportadas**, a propósito: una copia se comparte y se
-mueve de sitio, y esa contraseña da permiso de escritura sobre tus ficheros — la copia acabaría
-viajando con su propia llave dentro. Hay una prueba en `verify:data` que lo comprueba.
-
-No se usa una tarea en segundo plano a propósito: Android las mata sin avisar y encima no se vería
-si funcionan. Como la app se abre en la mesa para apuntar lo que has pedido, en la práctica la copia
-acaba siendo frecuente igual.
-
-## Verificación de la capa de datos
-
-Los datos son la parte que no puede fallar, así que se prueban ejecutando **el mismo código que
-corre en el móvil** contra un SQLite de escritorio:
+Data is the part that can't fail, so it's tested by running **the same code that runs on the phone**
+against a desktop SQLite:
 
 ```bash
-npm run verify:data       # formato de copia: ida y vuelta, fotos, huecos, volumen, rechazos
-npm run verify:library    # reglas: progreso, «¿qué pido hoy?», estadísticas, borrados
-npm run verify:migration  # que el esquema se crea de forma idempotente
+npm run verify:data       # backup format: round trip, photos, missing fields, volume, rejections
+npm run verify:library    # rules: progress, "what to order", stats, deletions
+npm run verify:migration  # the schema is created idempotently
 ```
 
-Esto es posible porque la lógica pide la base de datos a [`src/lib/dbRef.ts`](src/lib/dbRef.ts) en
-vez de crearla ella: [`src/lib/db.ts`](src/lib/db.ts) es el **único** fichero que toca
-`expo-sqlite`. Con las fotos se hace lo mismo: [`backupCore.ts`](src/lib/backupCore.ts) recibe un
-`PhotoCodec` en vez de importar `expo-file-system`, y las pruebas le pasan uno en memoria.
+This works because the logic gets its database from [`src/lib/dbRef.ts`](src/lib/dbRef.ts) instead of
+creating it: [`src/lib/db.ts`](src/lib/db.ts) is the **only** file that touches `expo-sqlite`.
+Photos follow the same idea: [`backupCore.ts`](src/lib/backupCore.ts) receives a `PhotoCodec`
+instead of importing `expo-file-system`, and the tests pass it an in-memory one.
 
-Se usa **libsql** y no `better-sqlite3` porque este último es sincrónico y no admite transacciones
-asíncronas, mientras que `expo-sqlite` sí: con libsql la semántica coincide con la real.
+The tests use **libsql** rather than `better-sqlite3`, because the latter is synchronous and doesn't
+support async transactions, while `expo-sqlite` does. With libsql the semantics match the real thing.
 
-## Estructura
+---
+
+## Project Structure
 
 ```
-app/                     # rutas (expo-router)
-  (tabs)/                # Restaurantes, Stats, Ajustes
-  restaurante/[id]       # carta y «¿qué pido hoy?»
-  plato/[id]             # historial de un plato
-src/
-  lib/                   # datos y lógica
-  ui/                    # tokens de diseño y componentes base
-  components/            # piezas con lógica de la app
-  hooks/                 # consultas reactivas (useLiveQuery de Drizzle)
-verify/                  # comprobaciones (Node, no van dentro del APK)
-scripts/                 # compilar y firmar el APK
+Ludok-taste/
+├── app/                    ← Routes (expo-router)
+│   ├── (tabs)/             ← Restaurants, Stats, Settings
+│   ├── restaurante/[id]    ← Menu and "what should I order today?"
+│   └── plato/[id]          ← History of a single dish
+├── src/
+│   ├── lib/                ← Data and logic (SQLite, Drizzle, backups, Nextcloud)
+│   ├── ui/                 ← Design tokens and base components
+│   ├── components/         ← App-specific components
+│   └── hooks/              ← Reactive queries (Drizzle's useLiveQuery)
+├── verify/                 ← Data layer tests (Node, not shipped in the APK)
+├── scripts/
+│   └── build-apk.sh        ← Builds and signs the release APK
+├── assets/                 ← Icon and splash screen
+├── app.json                ← Expo configuration
+└── package.json
 ```
 
-## Diseño: «Sala oscura»
+The `android/` folder is generated by `expo prebuild` and is not committed.
 
-La foto del plato es lo único que pone color; la interfaz es monocroma **sin color de acento**, y la
-jerarquía la marca el contraste. El color solo aparece con significado: rojo para borrar, ámbar para
-el aviso de copia. Todo sale de [`src/ui/theme.ts`](src/ui/theme.ts).
+---
 
-Hay tema claro además del oscuro, con el mismo criterio; se elige en Ajustes.
+## Contributing
 
-## Historia: dos nombres antes de este
+Pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the development setup and
+conventions. To report a security vulnerability, follow [SECURITY.md](SECURITY.md) instead of
+opening a public issue.
 
-Hasta agosto de 2026 esto era una PWA llamada **Ludrest** (HTML + JS a pelo, con IndexedDB)
-pensada para GitHub Pages. Se reescribió como app nativa por lo mismo que Ludok Time: en
-GrapheneOS una PWA
-[no llega a ser una app](https://discuss.grapheneos.org/d/4175-does-pwa-use-webview-or-vanadium),
-y en la web había que *pedirle* al navegador que no borrara los datos
-(`navigator.storage.persist()`), que podía negarse. En nativo solo desaparecen si desinstalas.
+---
 
-Como app nativa siguió llamándose Ludrest hasta septiembre de 2026, cuando pasó a llamarse
-**Ludok Taste** para seguir la misma estructura que el resto de apps de la familia (Ludok Time,
-Ludok Been, Ludok Wallet). Fue un cambio de nombre, no de formato: el paquete Android cambió
-(`com.ludok.rest` → `com.ludok.taste`, por eso hizo falta desinstalar y volver a instalar), pero
-el esquema de la base de datos es el mismo de siempre.
+## License
 
-**Las copias de la PWA se siguen pudiendo importar.** El importador las reconoce por el campo
-`version` (en vez de `schemaVersion`) y traduce lo que cambió: fechas de texto ISO a milisegundos,
-precios escritos a mano («2,50») a números, cadenas vacías a campos ausentes y las fotos en
-`data:` URL a ficheros. Está todo en [`src/lib/legacy.ts`](src/lib/legacy.ts), con su prueba en
-`verify:data`.
+Distributed under the **MIT License**. You are free to use, modify and share Ludok Taste, including
+for commercial use, as long as you keep the copyright notice. See [LICENSE](LICENSE) for the full text.
 
-El código de la PWA sigue en el historial de git.
+---
+
+<div align="center">
+
+Made by [Luken Iriondo](https://github.com/iamLudok) · If Ludok Taste is useful to you, consider giving it a ⭐
+
+</div>

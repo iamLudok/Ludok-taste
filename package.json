@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "expo-router/entry",
   "private": true,
+  "license": "MIT",
   "dependencies": {
     "@react-native-community/datetimepicker": "9.1.0",
     "drizzle-orm": "^0.45.2",
