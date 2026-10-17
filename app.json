@@ -13,7 +13,7 @@
     "android": {
       "package": "com.ludok.taste",
       "adaptiveIcon": {
-        "backgroundColor": "#e85d3d",
+        "backgroundColor": "#7A45C4",
         "foregroundImage": "./assets/android-icon-foreground.png"
       },
       "predictiveBackGestureEnabled": false
