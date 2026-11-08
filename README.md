@@ -22,15 +22,12 @@ Your data lives on your phone. No accounts. No servers. No tracking.
 
 ---
 
-<!--
-## Screenshots
-
 <p align="center">
-  <img src="docs/screenshots/restaurants.png" width="230" alt="Restaurant list">
-  <img src="docs/screenshots/what-to-order.png" width="230" alt="What should I order today?">
-  <img src="docs/screenshots/stats.png" width="230" alt="Stats">
+<img src="docs/screenshots/menu.webp" alt="A restaurant's menu, with what you've tried" width="260">&nbsp;
+<img src="docs/screenshots/stats.webp" alt="Stats: restaurants, dishes and your best dishes" width="260">
 </p>
--->
+
+<p align="center"><sub>Menu · Stats</sub></p>
 
 ## Table of Contents
 
